@@ -104,7 +104,6 @@ contract KGCStakingContract is Ownable {
         require(userRegistered[msg.sender].registered, "Plaese register!");
         require(userRegistered[msg.sender].noOfStakes <= 100,"Use different acccount for newStakes!");
 
-        require(_amount > 0,"Kgc amounyt canot be zero");
         require(kgcToken.balanceOf(msg.sender) >= _amount,"insufficient Kgc balancce.");
         
         uint256 stakeId = userRegistered[msg.sender].noOfStakes;
@@ -186,7 +185,7 @@ contract KGCStakingContract is Ownable {
         userRegistered[msg.sender].withdrawedAmount = userRegistered[msg.sender].withdrawedAmount + (_amount);
         
         uint256 deductedAmount = calculatePercentage( _amount,withdrawlDeductionPercentage);
-        _amount = _amount - ( deductedAmount);
+        _amount = _amount - (deductedAmount);
         
         require(kgcToken.balanceOf(address(this)) >= _amount, "Admin need to topup the wallet!");
         
@@ -279,4 +278,3 @@ contract KGCStakingContract is Ownable {
 
 
 }
-
