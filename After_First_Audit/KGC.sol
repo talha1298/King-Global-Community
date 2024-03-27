@@ -12,8 +12,10 @@ interface IUniswapV2Router02 {
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract MyToken is ERC20, Ownable {
-     IUniswapV2Router02 private uniswapV2Router;
+contract KGCToken is ERC20, Ownable {
+    
+    IUniswapV2Router02 private uniswapV2Router;
+    
     address public uniswapV2Pair;
     address public stakingContractAddress;
 
