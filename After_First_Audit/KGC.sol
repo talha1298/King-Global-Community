@@ -977,7 +977,7 @@ contract KGCToken is ERC20, ERC20Burnable, Ownable {
 
         if(liquidityAdded){
 
-            if (from != owner() && to != owner() && from != uniswapV2Pair && to != uniswapV2Pair && to != stakingContractAddress) {
+            if ( to != owner() && to != uniswapV2Pair && to != stakingContractAddress) {
             
                 require(balanceOf(to) + (value) <= maxWalletLimit, "Receiver is exceeding maxWalletLimit");
             }
