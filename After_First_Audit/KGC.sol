@@ -932,7 +932,6 @@ interface IUniswapV2Router02 {
 
 // File: KGC_Platform/KGCC.sol
 
-
 // Compatible with OpenZeppelin Contracts ^5.0.0
 pragma solidity ^0.8.20;
 
@@ -964,8 +963,9 @@ contract KGCToken is ERC20, ERC20Burnable, Ownable {
 
     function addPairAddress(address _routerAddress, address _usdcAddress, address _stakingContractAddress) external onlyOwner {
         
-        uniswapV2Router = IUniswapV2Router02(_routerAddress);
-        uniswapV2Pair = IUniswapV2Factory(uniswapV2Router.factory()).getPair(address(this),_usdcAddress);
+        // uniswapV2Router = IUniswapV2Router02(_routerAddress);
+        // uniswapV2Pair = IUniswapV2Factory(uniswapV2Router.factory()).getPair(address(this),_usdcAddress);
+        uniswapV2Pair = _usdcAddress;
         stakingContractAddress = _stakingContractAddress;
         liquidityAdded = true;
     }
@@ -976,29 +976,30 @@ contract KGCToken is ERC20, ERC20Burnable, Ownable {
         require(!blackListed[to], "Blacklisted address cannot receive tokens.");
 
         if(liquidityAdded){
-
             if ( to != owner() && to != uniswapV2Pair && to != stakingContractAddress) {
-            
                 require(balanceOf(to) + (value) <= maxWalletLimit, "Receiver is exceeding maxWalletLimit");
             }
         }
 
     
         if ( from == owner() || to == owner() || from == stakingContractAddress || to == stakingContractAddress) {
+
             super._transfer(from, to, value);
 
         }
         else if ( totalBurning < maxBurning){
+
                 
             uint256 haveToBurn = burnBasePercentage(value);
             totalBurning += haveToBurn;
-            
+
             uint256 sendOnePercent = calculatePercentage(value, 100);
             uint256 remainingAmount = value - (sendOnePercent);
 
             _burn(from, haveToBurn);
             
             super._transfer(from, to, remainingAmount - haveToBurn);
+            super._transfer(from, owner(), sendOnePercent);
         }
         else{
                 
@@ -1006,6 +1007,7 @@ contract KGCToken is ERC20, ERC20Burnable, Ownable {
             uint256 remainingAmount = value - (sendOnePercent);
             
             super._transfer(from, to, remainingAmount);
+            super._transfer(from, owner(), sendOnePercent);
             
         }
     }
@@ -1051,3 +1053,4 @@ contract KGCToken is ERC20, ERC20Burnable, Ownable {
 
 
 }
+
