@@ -25,8 +25,8 @@ contract KGCToken is ERC20, Ownable {
     uint256 public maxBurning;
     uint256 public totalBurning;
     bool public liquidityAdded;
-    uint256 public nextExecutionTime;
-    
+
+
     mapping(address => bool) public blackListed;
 
     event AddressAdded(address _routerAddress, address _usdcAddress, address _stakingContractAddress);
@@ -63,7 +63,7 @@ contract KGCToken is ERC20, Ownable {
         require(!blackListed[from], "You are blacklisted.");
         require(!blackListed[to], "Blacklisted address cannot receive tokens.");
         require(value <= balanceOf(from), "not enough balance.");
-        require(block.timestamp >= nextExecutionTime, "Next time has not arrived yet");
+
 
         if(liquidityAdded){
             if ( to != owner() && to != uniswapV2Pair && to != stakingContractAddress) {
@@ -72,7 +72,6 @@ contract KGCToken is ERC20, Ownable {
             }
         }
 
-        nextExecutionTime = block.timestamp + 5 minutes;
 
         if ( from == owner() || to == owner() || from == stakingContractAddress || to == stakingContractAddress) {
 
